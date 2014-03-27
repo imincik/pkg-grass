@@ -1,0 +1,162 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.ask</em> is designed for shell scripts that need to
+prompt the user for the name of a data base file in the
+user's current GRASS location.  After <em>g.ask</em> is
+invoked with needed parameters, it will query the user for
+a file name of the specified <em>type</em> and
+<em>element</em>.  After the user responds to this query,
+the program will write four lines to the UNIX output file
+specified by <em>unixfile</em>.
+
+<!-- unused
+<h2>OPTIONS</h2>
+
+<h3>Parameters:</h3>
+
+
+<dl>
+
+
+<dt><b>type=</b><em>name</em> 
+
+<dd>The type of query.  Options for <em>name</em> are 
+<em>old</em>, <em>new</em>,
+<em>any</em>, and <em>mapset</em>;  their functions are given below.
+"New", "any", and "mapset" only look in the user's current mapset.
+
+<dl>
+<dd>
+<dt><b>old</b>
+<dd>For existing data files anywhere in the user's mapset search path.
+
+<dt><b>new</b> 
+
+<dd>Used to create a new file in the current mapset, which must not
+already exist there (if a file with this name exists there,
+it will not be overwritten).
+
+<dt><b>any</b> 
+
+<dd>Creates a file in the current mapset, which may or may not
+already exist there.  If a file with this name exists in the
+current mapset, it will be overwritten;
+if not, a new file with this name will be created.
+
+<dt><b>mapset</b> 
+
+<dd>For files that must exist in the current mapset
+The shell write wants the name of a file which exists
+in the user's current mapset.  This type would
+used instead of "old" if the file is to be modified.
+</dl>
+
+<dt><b>prompt=</b>"<em>string</em>" 
+
+<dd>The prompt to be displayed to the user.  If more than
+one word, the prompt should be enclosed within double
+quotes ("").
+
+<dt><b>element=</b><em>name</em> 
+
+<dd>The name of the GRASS data base element (i.e.,
+directory under a GRASS mapset) whose files are to be
+queried.
+
+<dt><b>desc=</b>"<em>string</em>" 
+
+<dd>A short description of the data base element which is
+meaningful to the user.  If description contains more than
+one word, it should be enclosed within double quotes ("").
+
+<dt><b>unixfile=</b><em>name</em> 
+
+<dd>The name of a UNIX file to store the user's response.
+See next section for what is written to this file and how
+it can be used by shell scripts.
+
+</dl>
+-->
+
+<h2>OUTPUT</h2>
+
+Upon receiving the user's response to its request for a
+file name, <em>g.ask</em> writes four lines to the
+specified <em>unixfile</em>; this output file is placed in
+the user's current working directory, unless otherwise
+specified, and contains the following lines:
+
+
+<div class="code">
+<PRE>
+name='<em>some_name</em>'
+mapset='<em>some_mapset</em>'
+fullname='<em>some_fullname</em>'
+file='<em>some_fullpath</em>'
+</pre></div>
+
+<p>
+
+The output is <em>/bin/sh</em> commands to set the variable
+<em>name</em> to the file name specified by the user (of
+the <em>element</em> and <em>type</em> requested by
+<em>g.ask</em>), <em>mapset</em> to the GRASS mapset in
+which this file resides (or will be created),
+<em>fullname</em> is the name with the mapset embedded in
+it, and <em>file</em> to the full UNIX path name
+identifying this file.  These variables may be set in the
+<em>/bin/sh</em> as follows:
+
+<dl>
+<dd>
+<b>. unixfile</b>
+</dl>
+
+
+<p>
+
+The . is a shell command which means read the
+<em>unixfile</em> and execute the commands found there.  It
+is NOT part of the <em>unixfile</em> name and MUST be
+followed by a space.
+
+<h2>NOTES</h2>
+
+The user may choose to simply hit the return key and not enter a file name.
+If this happens the variables will be set as follows:
+
+
+<div class="code">
+<PRE>
+name=
+mapset=
+fullname=
+file=
+</pre></div>
+
+<p>
+
+The following is a way to test for this case:
+
+<div class="code">
+<PRE>
+if [ ! "$file" ]
+then
+	exit
+fi
+</PRE></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a href="d.ask.html">d.ask</a></em>,
+<em><a href="g.filename.html">g.filename</a></em>,
+<em><a href="g.findfile.html">g.findfile</a></em>,
+<em><a href="g.gisenv.html">g.gisenv</a></em>,
+<em><a href="g.parser.html">g.parser</a></em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

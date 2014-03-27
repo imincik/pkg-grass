@@ -1,0 +1,166 @@
+/*! \mainpage GRASS 6 Programmer's Manual
+<!-- * doxygenized from "GRASS 5 Programmer's Manual"
+       by M. Neteler 2/2004
+     * updated 8/2005, 2006, 2007, 2008
+  -->
+
+<a href="http://grass.osgeo.org">GRASS GIS</a> (Geographic Resources
+Analysis Support System) is an open source, Free Software
+<em>Geographical Information System</em> (GIS) with raster,
+topological %vector, image processing, and graphics production
+functionality that operates on various platforms through a graphical
+user interface (GUI) or command line interface (CLI). It is released under GNU
+General Public License (GPL).
+
+This manual introduces the reader to the <i>Geographic Resources Analysis 
+Support System</i> from the programming perspective. Design theory, system
+support libraries, system maintenance, and system enhancement are all 
+presented. Standard GRASS 4.x conventions are still used in much of the
+code. This work is part of ongoing research being performed by the 
+<a href="http://grass.osgeo.org/community/team.php">GRASS Development Team</a>,
+an international team of programmers,
+GRASS module authors are cited within their module's source code and the 
+contributed manual pages.
+
+&copy; 2000-2013 GRASS Development Team<br>
+Published under GNU Free Documentation License (GFDL)
+http://www.fsf.org/copyleft/fdl.html
+
+This manual comes with ABSOLUTELY NO WARRANTY. The development of GRASS 
+software and this manual is kindly supported by the
+<a href="http://www.osgeo.org">Open Source Geospatial Foundation</a>,
+who provides the GRASS main infrastructure.
+
+Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
+
+<h2>Table of contents</h2>
+
+- \subpage corelibs
+- \subpage libs
+- \subpage interfaces
+- \subpage gui
+- \subpage location
+
+<p>
+<i>Missing entries below are either not yet uploaded to SVN (need to be migrated
+from GRASS 5 Programmer's manual) or are simply undocumented.</i>
+
+<!-- original:
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass6_arch.odp
+-->
+\image html "grass6_arch.png" "GRASS 6 Architecture"
+
+\section corelibs Principal library
+
+(the name refers to the directory name in lib/ in the source code)
+
+ - gis: \ref gislib, with following subsection
+  - \ref gisrasterlib
+  - \ref gisvectorlib
+  - Sites File Processing (legacy, merged into \ref gisvectorlib)
+
+\section libs Further libraries
+
+(the name refers to the directory name in lib/ in the source code)
+
+ - arraystats:  Library of statistics for arrays of doubles - \ref arraystats (new, under development)
+ - bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
+ - btree:	Binary tree library - \ref btree
+ - cairodriver: <a href="http://cairographics.org">Cairo</a> display driver library - \ref cairodriver
+ - cdhc:	Library for testing normality and exponentiality - \ref cdhc 
+ - cluster:     Library for cluster analysis (image processing) - \ref cluster
+ - datetime:	DateTime library - \ref datetime
+ - db:		\ref dbmilib
+ - display:	\ref displaylib
+ - %driver:     Graphics monitor driver
+ - dspf:        DSPF libary - \ref dspf (obsolete?)
+ - edit:	Raster edit library (cellhd, history, cats) - \ref edit
+ - external:	External libraries from other projects (such as shapelib or bwidget) - \ref external
+ - fonts:	Hershey library - \ref fonts
+ - form:	TCL/TK forms library - \ref form (obsolete?)
+ - g3d:	        \ref g3dlib
+ - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
+ - gpde:        \ref gpdelib (partial differential equations library)
+ - gtcltk:	Tcl/Tk stuff - \ref gtcltk
+ - imagery:	\ref imagerylib 
+ - init:	\ref init (GRASS initialization code + scripts)
+ - linkm:	Linked list memory manager - \ref linkm (obsolete?)
+ - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
+ - pngdriver:   PNG display driver library - \ref pngdriver
+ - proj:	\ref projlib (wrapper to PROJ4 projection library)
+ - psdriver:    PostScript display driver library - \ref psdriver
+ - python:      \ref pythonlib
+ - raster:	\ref rastergraphicslib (note: raster map functions are in \ref gislib)
+ - rowio:	Raster row in/out library - \ref rowio
+ - rst:	Library for interpolation with regularized splines with tension - \ref rst
+ - segment:	\ref segmentlib (segment library for segmented raster reading)
+ - sites:	Old Sites library, now interfaced to \ref Vector_Library - \ref sites
+ - stats:       Raster stats library - \ref stats
+ - symbol:	Drawing symbols for %point %vector data library - \ref symbol
+ - vask:	Cursor management library - \ref vask
+ - %vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
+  - vedit:      \ref Vedit_Library - %vector editing
+  - neta:       \ref netalib
+ - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
+<!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
+<!--<li>D:		display library - \ref d_displaylib-->
+<!--<li>front.end:	interface for interactive modules library - \ref frontend-->
+
+\section interfaces Interfaces
+
+ - \ref pythonlib
+
+\section gui GUI
+
+ - \ref wxpythonlib
+
+\section location File structure of GRASS Location
+
+A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
+organized as follows:
+
+ - <b>cellhd/</b>:
+  map header including projection code, coordinates representing
+  the spatial extent of the raster map, number of rows and columns, resolution, 
+  and information about map compression;</li>
+ - <b>cell/, fcell/ or grid3/</b>:
+  generic matrix of values in a compressed, portable
+  format which depends on the raster data type (integer, floating %point or 3D grid);</li>
+ - <b>hist/</b>:
+  history file which contains metadata such as the data source,
+  the command that was used to generate the raster map, or
+  other information provided by the user;</li>
+ - <b>cats/</b>: 
+  optional category file which contains text or numeric labels assigned
+  to the raster map categories;</li>
+ - <b>colr/</b>: 
+  optional color table;</li>
+ - <b>cell_misc/</b>: 
+  optional timestamp, range of values, quantization rules (for floating %point maps)
+  and null (no-data) files; </li>
+
+A GRASS <b>%vector maps</b> are stored in several separate files in a single
+directory. While the attributes are stored in either a DBF file, a SQLite file
+or in an external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
+as follows:
+
+ - <b>head</b>: %vector map ASCII header with information about the map creation
+  (date and name), its scale and threshold;</li>
+ - <b>coor</b>: binary geometry file which includes the coordinates of graphic
+  elements (primitives) that define the %vector feature;</li>
+ - <b>topo</b>: binary topology file describes the spatial relationships between the
+  map's graphic elements;</li>
+ - <b>hist</b>: history ASCII file with complete commands that were used to
+  create the %vector map, as well as the name and date/time of the map
+  creation;</li>
+ - <b>cidx</b>: binary category index file which is used to %link the %vector
+  object IDs to the attribute table rows;</li>
+ - <b>dbln</b>: ASCII file which contains definition(s) of %link to attribute
+  storage in database (DBMS).</li>
+
+<!-- original: 
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
+-->
+\image html "loc_struct.png" "Diagram of GRASS file structure"
+
+*/

@@ -1,0 +1,187 @@
+<h3>
+This module is superseded and scheduled for demolition.
+<br>Please use "<em><a href="d.graph.html">d.graph</a>
+<b>-m</b></em>" instead.</h3>
+
+<h2>DESCRIPTION</h2>
+
+<em>d.mapgraph</em> draws graphics that are described in
+standard input (default) or the UNIX input file
+<em>name</em>. If commands are entered via standard
+input, a <em>ctrl-d</em> is used to signal the end of input
+to <em>d.mapgraph</em>. This program performs
+essentially the same function as 
+<em><a href="d.graph.html">d.graph</a></em>; however,
+point locations are specified to <em>d.mapgraph</em> in the
+geographic coordinate system of the user's current mapset
+and location (i.e., in map coordinates), rather than in
+graphics display screen coordinates.
+
+<p>
+
+The program can be run interactively or non-interactively.
+The user can run the program completely non-interactively
+by specifying the name of a file containing
+<em>d.mapgraph</em> graphics commands and the values of all
+needed parameters on the command line.  The user can
+instead elect to run the program partially interactively,
+by specifying any/all of the parameters <em>except</em> the
+graphics <b>input=</b><em>name</em> parameter on the
+command line.  In this case, <em>d.mapgraph</em> will
+expect the user to input <em>d.mapgraph</em> graphics
+commands from standard input (i.e., the keyboard) and will
+(silently) prompt the user for these graphics commands.
+Alternately, the user can simply type <b>d.mapgraph</b> on
+the command line, and be prompted for the values of all
+parameters (the user can still input graphics commands from
+an input file using this form.) In this case, the user is
+presented with the standard GRASS 
+<em><a href="g.parser.html">g.parser</a></em> interface.
+
+<p>
+<em>d.mapgraph</em> is used for drawing simple graphics on
+top of map layers.  The coordinate system used by
+<em>d.mapgraph</em> is the same as that of the map layer
+displayed in the active display frame on the graphics
+monitor (or that of the user's current region, if no map is
+displayed).
+
+<p>
+The graphics language is simple and uses the following commands: 
+
+<dl>
+
+<dt><b>#</b> <em>comment</em> 
+
+<dd>A line of comment which is ignored in the processing. 
+
+<dt><b>move</b> <em>xpos ypos</em> 
+
+<dd>The current location is updated to <em>xpos ypos</em>
+(where these, respectively, are the easting and northing of
+geographic coordinates stated in the map coordinate system
+of the user's current GRASS location, falling within the
+current region and active frame).  If unspecified by the
+user, the current location becomes (0,0).  If, as most
+likely, the point (0,0) falls outside of the user's current
+region, graphics drawn there will not appear in the
+graphics frame.
+
+<p>
+
+Note: use <em><a href="g.region.html">g.region</a></em>
+to obtain the coordinates of current location.  Use <em>
+<a href="d.where.html">d.where</a></em> to obtain specific
+map coordinates of various points on the raster map
+displayed in the active frame.
+
+<br>
+
+Note: there must be a space between <em>xpos</em> and <em>ypos</em>.
+
+<dt><b>draw</b> <em>xpos ypos</em> 
+
+<dd>A line is drawn in the current color from the current
+location to the new location <em>xpos ypos</em>, which then
+becomes the current location.  <em>xpos</em> and
+<em>ypos</em> are (respectively) an easting and northing
+stated in the map coordinate system of the user's current
+GRASS location, and located within the user's current
+geographic region and active frame.
+
+<p>
+
+Note: there must be a space between <em>xpos</em> and <em>ypos</em>.
+
+<dt><b>color</b> <em>color</em> 
+
+<dd>Sets the current color to that stated. 
+Color options are: <em>red</em>, 
+<em>orange</em>, 
+<em>yellow</em>, 
+<em>green</em>, 
+<em>blue</em>, 
+<em>indigo</em>, 
+<em>violet</em>,
+<em>magenta,</em> 
+<em>brown</em>, 
+<em>gray</em>,
+<em>white</em>, 
+<em>black</em>,
+an R:G:B triplet (separated by colons),
+or the word "none" (draws in the default background color).
+
+<dt><b>size</b> <em>xper yper</em>
+
+<dd>Subsequent text will be drawn such that the text is
+<em>xper</em> percent of the display frame's width and
+<em>yper</em> percent of the display frame height.  If not
+specified by the user, the text size becomes 5 percent of
+the active frame's width and 5 percent of the frame's
+height.  This is equivalent to entering <b>size 5 5</b>.
+
+<dt><b>text</b> <em>line-of-text</em> 
+
+<dd>The stated text is drawn at the current location using
+the current color and the current size.
+
+<dt><b>icon</b> <em>type size x y</em> 
+
+<dd>Draws an icon of types o, x, or + with specified size
+at location x,y.  Note: type o designates a square.
+
+<dt><b>polygon</b> <br>
+<em> xpos ypos</em> <br>
+<em> xpos ypos</em> <br>
+. <br>
+. <br>
+. <br>
+
+<dd>The map coordinates appearing on lines beneath the word
+<em>polygon</em>, one pair per line, circumscribe a
+polygon which is to be filled with the current color.
+
+</dl>
+
+<h2>NOTES</h2>
+
+<em>d.mapgraph</em> is identical to the 
+<em><a href="d.graph.html">d.graph</a></em> command, except for the 
+difference in coordinate systems used. In the future functionality will
+be merged into <em>d.graph</em> and <em>d.mapgraph</em> will be removed.
+
+<p>
+
+<em>d.mapgraph</em> will complain if the user enters
+something to standard input that it does not understand.
+Blank lines in the input file will result in this error
+message.
+
+<h2>EXAMPLE</h2>
+
+Draw some text in the center of the display:
+<pre>
+   EAST=`g.region -c | grep east | cut -f2 -d:`
+   NORTH=`g.region -c | grep north | cut -f2 -d:`
+
+   d.mapgraph << EOF
+     move $EAST $NORTH
+     text GRASS
+   EOF
+</pre>
+
+<h2>SEE ALSO</h2>
+
+<em><a href="d.frame.html">d.frame</a></em><br>
+<em><a href="d.graph.html">d.graph</a></em><br>
+<em><a href="d.rast.html">d.rast</a></em><br>
+<em><a href="d.zoom.html">d.zoom</a></em><br>
+<em><a href="g.region.html">g.region</a></em>
+
+<h2>AUTHOR</h2>
+
+James Westervelt, 
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

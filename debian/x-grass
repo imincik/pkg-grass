@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# This is a wrapper to call GRASS without a running (x)terminal.
+#
+
+if [ -n "$DISPLAY" ]; then
+	if [ -n "$(tty)" ]; then
+		exec /usr/bin/grass "$@"
+	else
+		exec x-terminal-emulator -e /bin/sh -c "/usr/bin/grass $@" 
+	fi
+else
+	if [ -n "$(tty)" ]; then
+		exec /usr/bin/grass "$@"
+	fi
+fi
+
+# Cannot run without a terminal
+exit 255

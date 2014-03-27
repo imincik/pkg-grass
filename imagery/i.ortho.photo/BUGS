@@ -1,0 +1,22 @@
+Known BUGS
+$Date: 2004-11-09 12:57:26 $
+
+- menu 6: photo.init
+          it's unclear at time if these values are used in case the user
+          selects 0
+               Use these values at run time? (1=yes, 0=no)            0_
+           
+           -> should be explained in manual
+  
+- menu 7: photo.2target
+          after selecting (click) the second control point in the right
+          window, this GCP isn't shown, should be drawn in orange color
+          before asking for confirmation.
+
+---------------------
+TODOs
+
+- menu 8: photo.rectify
+          should work without (7) photo.2target if (6) photo.init is used.
+          (see ERDAS)
+          requires modification of I_compute_ortho_equations() in libes/orthoref.c

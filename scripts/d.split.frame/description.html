@@ -1,0 +1,46 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.split.frame</em> divides the active display into a number of equal
+frames, either horizontally or vertically.
+
+
+<h2>NOTES</h2>
+
+Frame labels are created as Spanish numbers to distinguish them from
+monitor numbers, etc. These are "<i>uno, dos, tres, cuatro, cinco,
+seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince,
+and dieciseis</i>" for frames 1-16.
+The background frame is called <i>full_screen</i>.
+
+<p>
+Commands such as <em>d.rast.leg</em> will interfere with the frame creation
+and cannot be used.
+
+
+<h2>EXAMPLE</h2>
+
+Split the display monitor into six frames (3x2), jump to the third frame,
+and draw a map.
+<div class="code"><pre>
+  d.split.frame -h frames=6 
+  d.frame -s tres
+  d.rast elevation.dem
+</pre></div>
+<br>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.frame.html">d.frame</a>,
+<a href="d.frame.html">d.split</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+Hamish Bowman<br>
+<i>Dunedin, New Zealand</i>
+
+<p>
+<i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

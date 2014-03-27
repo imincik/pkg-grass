@@ -1,0 +1,83 @@
+<h2>DESCRIPTION</h2>
+
+
+<em>i.fft</em> is an image processing program based on the FFT algorithm
+given by Frigo et al. (1998), that processes a single input raster map layer
+(<b>input_image</b>) and constructs the real and imaginary Fourier
+components in frequency space.
+
+<h2>NOTES</h2>
+
+The real and imaginary components are stored as arrays of
+doubles in the <em>cell_misc</em> directory (for use in the
+inverse transform program,
+
+<em><a href="i.ifft.html">i.ifft</a></em>),
+
+and are also scaled and formatted into the
+<b>real_image</b> and <b>imaginary_image</b> raster map
+layers for inspection, masking, etc.  In these raster map
+layers the low frequency components are in the center and
+the high frequency components are toward the edges.  The
+<b>input_image</b> need not be square;  before
+processing, the X and Y dimensions of the
+<b>input_image</b> are padded with zeroes to the next
+highest power of two in extent (i.e., 256 x 256 is
+processed at that size, but 200 x 400 is padded to 256 x
+512).  The cell category values for viewing, etc., are
+calculated by taking the natural log of the actual values
+then rescaling to 255, or whatever optional range is given
+on the command line, as suggested by Richards (1986).  A
+color table is assigned to the resultant map layer.
+
+<p>
+The current geographic region and mask settings are
+respected when reading the input file.  The presence of a
+mask will, in general, make the resulting fast Fourier
+transform invalid, or at least difficult to interpret.
+
+<h2>EXAMPLE</h2>
+
+North Carolina example:
+
+<div class="code"><pre>
+g.region rast=lsat7_2002_70
+i.fft input_image=lsat7_2002_70 real=lsat7_2002_70.real imaginary=lsat7_2002_70.imag
+
+# set region to resulting FFT output map (due to new FFT coordinate space):
+g.region rast=lsat7_2002_70.real -p
+d.mon x0
+d.rast lsat7_2002_70.real
+d.rast lsat7_2002_70.imag
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<ul>
+<li> M. Frigo and S. G. Johnson (1998): "FFTW: An Adaptive Software Architecture
+for the FFT". See <a href="http://www.fftw.org">www.FFTW.org</a>: FFTW is a C subroutine library
+for computing the Discrete Fourier Transform (DFT) in one or more
+dimensions, of both real and complex data, and of arbitrary input size.
+
+<li> John A. Richards, 1986. Remote Sensing Digital Image Analysis, Springer-Verlag.
+</ul>
+
+<p>
+Personal communication, between progam author and Ali R. Vali,
+Space Research Center, <A HREF="http://www.utexas.edu">University of Texas</A>, Austin, 1990.
+
+<p>
+
+<em><a href="i.cca.html">i.cca</a></em><br>
+<em><a href="i.class.html">i.class</a></em><br>
+<em><a href="i.ifft.html">i.ifft</a></em><br>
+<em><a href="i.pca.html">i.pca</a></em>
+
+<h2>AUTHOR</h2>
+
+David Satnik, GIS Laboratory, 
+Central Washington University
+<br>
+Glynn Clements (FFTW support)
+
+<p><i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

@@ -1,0 +1,68 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.mlist</em> is an extended version of 
+<em><a href="g.list.html">g.list</a></em> which
+provides regular-expression and wildcard support.
+<em>g.mlist</em> will only print map names and an optional separator,
+without extraneous output. In addition, map search is also available.
+
+<p>
+See the <em>g.list</em> help page for discussion of module options.
+
+
+<h2>EXAMPLES</h2>
+
+List all available GRASS data base files:
+<br>
+<TT>g.mlist type=all</TT>
+<p>
+
+List all raster and vector maps:
+<br>
+<TT>g.mlist type=rast,vect</TT>
+<p>
+
+<h3>Wildcards:</h3>
+
+List all vector maps starting with letter "r":
+<br>
+<TT>g.mlist type=vect pattern="r*"</TT>
+<p>
+
+List certain raster maps with one variable character/number:
+<br>
+<TT>g.mlist type=rast pattern="N45E00?.meters"</TT>
+
+<h3>Regular expressions:</h3>
+
+Print out all soils map with "soils" in their name:<br>
+<TT>g.mlist -r type=rast pattern='^soils'</TT>
+<p>
+
+Print out "tmp" if "tmp" raster map exists:<br>
+<TT>g.mlist -r pattern='^tmp$'</TT>
+<p>
+
+Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name linewise):<br>
+<TT>g.mlist -r type=vect pattern='^tmp[0-9]$'</TT>
+<p>
+
+Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name comma separated):<br>
+<TT>g.mlist -r type=vect sep=, pattern='^tmp[0-9]$'</TT>
+<p>
+This may be useful for other programs' parameter input 
+(e.g. <em><a href="r.series.html">r.series</a></em>).
+
+
+<h2>SEE ALSO</h2>
+
+<em><a href="g.list.html">g.list</a></em>
+<p>
+<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expressions</a>
+(aka regex) - from Wikipedia, the free encyclopedia
+
+
+<h2>AUTHOR</h2>
+Huidae Cho
+<p>
+<i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

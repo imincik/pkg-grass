@@ -1,0 +1,105 @@
+<h2>DESCRIPTION</h2>
+<em>(GRASS Shell Script)</em>
+<p>
+<em><b>d.out.file</b></em> uses <em>d.save</em>, the GRASS PNG or PostScript
+driver, and <tt>gdal_translate</tt> to export the currently selected X display
+monitor to a graphics file of several formats. Output image size can be set
+prior to export.
+<p>
+PNG and PPM formats are supported directly by the GRASS PNG driver and
+PostScript output is supported directly by the GRASS PS driver.
+<p>
+TIFF, GeoTIFF, JPEG, and BMP formats are supported by using <tt>gdal_translate</tt>
+on PPM format files produced by the GRASS PNG driver. Different levels of
+compression/quality are supported for JPEG files.
+<p>
+Graphic files are exported to the user's current working directory by
+default, but different paths may be specified in the output field.
+<p>
+EPS files are not compatible with <em>d.frame</em>, as it is not possible to nest
+encapsulation. Only the first frame will be drawn. In these cases it is
+recommended to output to regular PostScript format and then use a utility
+like <tt>ps2epsi</tt> to convert to an EPS file.
+Output from this module using the regular PostScript format may contain
+subframes.
+
+<p>
+GeoTIFF export is provided as a convenience. For raster export
+it is generally preferable to use the <em>r.out.gdal</em> or
+<em>r.out.tiff</em> modules. The advantage of using <em>d.out.file</em>
+is that you can easily overlay multiple raster maps, vector maps,
+and decorations into the GeoTIFF at the expense of resolution and
+quality. If you wish to minimize the negative effects, use
+"<tt>g.region&nbsp;align=</tt>" or "<tt>g.region&nbsp;rast=</tt>", then
+"<tt>g.region&nbsp;-g</tt>" or "<tt>r.info&nbsp;-g</tt>" to discover the
+raster rows and columns of the map, and feed these numbers into
+<em>d.out.file</em>'s <b>size</b> parameter as columns,rows.
+
+
+<h2>EXAMPLES</h2>
+
+<h4>Speafish dataset</h4>
+
+<div class="code"><pre>
+  g.region rast=slope -p
+  d.mon x0
+  d.rast slope
+  d.vect streams type=area,line
+  d.barscale at=0,94.5
+  d.out.file spearfish_pic format=png size=800,600
+  d.out.file spearfish_pic format=ps -r paper=a4
+</pre></div>
+<br>
+
+<h4>Multi-pane PostScript output using a shaded relief map and 
+<a href="http://grass.gdf-hannover.de/wiki/GRASS_AddOns#Display_add-ons">d.frame.quarter</a>
+from the Wiki-Addons site</h4>
+
+<div class="code"><pre>
+  g.region rast=elevation.dem
+  r.shaded.relief map=elevation.dem shad=elev.shad_relf
+  d.mon x1
+  d.frame.quarter
+  d.frame uno
+  d.his h=elevation.dem i=elev.shad_relf brighten=50
+  echo "A" | d.text -b color=black size=10 at=93,5
+  d.frame dos
+  d.his h=slope i=elev.shad_relf brighten=40
+  echo "B" | d.text -b color=black size=10 at=93,5
+  d.frame tres
+  d.his h=landcover.30m i=elev.shad_relf brighten=55
+  echo "C" | d.text -b color=black size=10 at=93,5
+  d.frame cuatro
+  d.his h=trn.sites i=elev.shad_relf brighten=15
+  echo "D" | d.text -b color=black size=10 at=93,5
+  d.frame full_screen
+  d.out.file spearfish_4 format=ps -r paper=a4
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.frame.html">d.frame</a>,
+<a href="d.mon.html">d.mon</a>,
+<a href="d.out.png.html">d.out.png</a>,
+<a href="d.save.html">d.save</a>,
+<a href="g.region.html">g.region</a>,
+<a href="ps.map.html">ps.map</a>,
+<a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.out.tiff.html">r.out.tiff</a>
+</em><br>
+<a href="cairodriver.html">Cairo driver</a>,
+<a href="pngdriver.html">PNG driver</a>,
+<a href="psdriver.html">PostScript driver</a>,
+<a href="htmlmapdriver.html">HTML-map driver</a>,
+<a href="xdriver.html">X driver</a><br>
+<a href="http://www.gdal.org">GDAL Homepage</a>
+
+
+<h2>AUTHORS</h2>
+
+Michael Barton, Arizona State University<br>
+Hamish Bowman, Otago University, New Zealand
+<p>
+<i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

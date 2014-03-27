@@ -1,0 +1,29 @@
+grass (6.4.3-1~precise3) precise; urgency=low
+
+  * updated control file for replace 6.4.3
+
+ -- Rashad M <mohammedrashadkm@gmail.com>  Tue, 30 Jul 2013 05:51:02 +0530
+
+grass (6.4.3-1~precise2) precise; urgency=low
+
+  * unmet dep error fixed
+
+ -- Rashad M <mohammedrashadkm@gmail.com>  Tue, 30 Jul 2013 04:43:15 +0530
+
+grass (6.4.3~1quantal1) quantal; urgency=low
+
+  * 6.4.3 rebuild for quantal
+
+ -- Rashad M <mohammedrashadkm@gmail.com>  Tue, 30 Jul 2013 01:14:01 +0530
+
+grass (6.4.3~1raring1) raring; urgency=low
+
+  * 6.4.3 rebuild for raring
+
+ -- Rashad M <mohammedrashadkm@gmail.com>  Tue, 30 Jul 2013 01:09:58 +0530
+
+grass (6.4.3~1precise1) precise; urgency=low
+
+  * 6.4.3 final release
+
+ -- Rashad M <mohammedrashadkm@gmail.com>  Mon, 29 Jul 2013 19:10:34 +0530

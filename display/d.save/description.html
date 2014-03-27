@@ -1,0 +1,49 @@
+<h2>DESCRIPTION</h2>
+
+When GRASS display (<em>d.</em>) commands are used to
+generate graphical images on the graphics monitor, some
+commands are noted in lists that the current graphics
+driver (see manual entry for 
+<em><a href="d.mon.html">d.mon</a></em>) maintains. This
+command, <em>d.save</em>, uses this information to
+create a shell script that can be used to recreate graphics
+in another frame at another time. The shell script is sent
+to standard output (the user's terminal). If you wish to
+save the shell script created by <em>d.save</em>, its
+output should be redirected to a file; for example:
+<dl>
+<dd> <b>d.save &gt; script.out </b> 
+</dl>
+
+The user can run the program non-interactively by
+specifying flag settings and parameter values on the
+command line. If the user types <b>d.save</b> without
+specifying these program arguments, the user will be
+prompted for inputs through the standard user interface
+described in the manual entry for 
+<em><a href="g.parser.html">g.parser</a></em>.
+
+
+<h2>NOTES</h2>
+
+Object numbers for remove= and move= options are displayed after #.
+
+<p>
+
+Display commands used interactively, and those that take
+their graphic instructions from standard input, will not be
+saved by <em>d.save</em>.
+
+<h2>SEE ALSO</h2>
+
+<em><a href="d.frame.html">d.frame</a></em><br>
+<em><a href="d.mon.html">d.mon</a></em><br>
+<em><a href="g.region.html">g.region</a></em><br>
+<em><a href="g.parser.html">g.parser</a></em>
+
+<h2>AUTHOR</h2>
+
+David Satnik, 
+Central Washington University
+
+<p><i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

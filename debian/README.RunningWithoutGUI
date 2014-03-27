@@ -1,0 +1,30 @@
+There are a number of ways to run GRASS without a GUI.
+(for example if the grass-gui package has not been installed)
+
+
+Non-interactive:  (e.g. a cron job on a back-end server)
+  Use the GRASS_BATCH_JOB environment variable to set the path to
+  the job script. Note this method may not work over NFS in HPC
+  Grid computing situations. See the GRASS wiki for details and
+  the workaround.
+
+Interactive:
+  To use just the GRASS command line interface most things will
+  work as normal, including d.mon graphics X-monitors and rendering
+  with the PNG drivers. To avoid error messages you will probably
+  want to set "export GRASS_UI_TERM=1" in your ~/.grass.bashrc file
+  and run "g.gui text" within GRASS to set the default GUI mode.
+
+From Quantum GIS or R-Statistics:
+  For use with QGIS you just need the grass-core and grass-doc
+  packages to be installed. For use with R typically you'd start
+  your R session from the GRASS command prompt, but it is
+  technically possible to run GRASS as a background job from R
+  (see the non-interactive notes above).
+
+
+As always, help can be found on the GRASS Wiki site:
+  http://grass.osgeo.org/wiki/
+
+
+

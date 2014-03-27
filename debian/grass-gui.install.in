@@ -1,0 +1,11 @@
+usr/lib/grass@VERSION@/bwidget
+usr/lib/grass@VERSION@/etc/dm
+usr/lib/grass@VERSION@/etc/form
+usr/lib/grass@VERSION@/etc/gui
+usr/lib/grass@VERSION@/etc/gm
+usr/lib/grass@VERSION@/etc/gtcltk
+usr/lib/grass@VERSION@/etc/nviz2.2
+usr/lib/grass@VERSION@/etc/v.digit
+usr/lib/grass@VERSION@/etc/wxpython
+usr/lib/grass@VERSION@/bin/v.digit
+usr/lib/grass@VERSION@/bin/xganim

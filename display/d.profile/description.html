@@ -1,0 +1,194 @@
+<h2>DESCRIPTION</h2>
+
+This command works only interactively. It clears the entire
+graphics screen and provides a graphical interaction
+allowing the selection of transects for which profiles are
+then generated. Input parameters can be specified on the command line
+for quicker start-up.
+
+<h2>USER PROMPTS</h2>
+
+First, you will be presented with a prompt asking you to
+choose a raster map layer to be profiled. Then you will be 
+prompted for an optional display raster.  The optional display raster
+will be shown rather than the profiled raster.  This is useful
+to be able to more easily see ground features, such as might be visible
+in an aerial photo or satellite image. Finally, you will
+be prompted for the name prefix for output file(s) containing the profile
+data. This is an optional feature.
+
+<p>
+
+After parameters are given, the raster layer will be
+displayed in the left half of the graphics monitor, and the
+right half will be divided into four
+frames. There will also be two frames along the top of the
+monitor: a mouse-button menu frame on the left, and a
+status frame on the right.
+
+<p>
+
+The mouse-button menu initially offers you three options: 
+
+<dl>
+<dd>
+Mouse Buttons: <br>
+Left: Where am I? <br>
+Middle: Mark FIRST Point of Profile Line. <br>
+Right: QUIT this. <br>
+</dl>
+
+You may query the displayed raster map layer by indicating
+points with the left mouse-button. The coordinates and
+category value of each point that you indicate will be
+displayed on in the status frame.  If you mark the first
+point of the profile line you will be presented with the
+following mouse-button menu:
+
+<dl>
+<dd>
+Mouse Buttons: <br>
+Left: Where am I? <br>
+Middle: Mark SECOND Point of Profile Line. <br>
+Right: QUIT this. <br>
+</dl>
+
+Once you mark the second point of the profile line, the
+profile line will be labeled (with a letter from A to D)
+and displayed in one of the four display frames on the
+right hand side of the screen. You will then be presented
+with a third mouse-button menu:
+
+<dl>
+<dd>
+Mouse Buttons: <br>
+Left: DO ANOTHER <br>
+Middle: CLEAR DISPLAY <br>
+Right: QUIT this. <br>
+</dl>
+
+If you would like to view another profile, click on the
+left mouse-button.  If you would like to redisplay the
+raster map layer and clear out the four profile frames,
+click on the middle mouse-button. If you would like to
+quit, then click on the right button.
+
+<p>
+
+If you selected the <b>plotfile</b> option, you will have up to
+four files starting with the <em>name</em> and followed by a suffix
+of the plot letter <em>A, B, C,</em> or <em>D</em>.  The plots that
+are written to these files reflect the last of each plot done with that
+letter (i.e. They will match what's in the display when you quit).
+
+<p>
+The format of the plot files is not geared toward any particular software,
+but should be easy to coax into a number of other programs.  The first 
+three lines contain some header information about the plot, each prefixed
+with a <TT>#</TT> sign to denote a comment.  A fourth comment line describes
+the data that follows.  It consists of the distance (always in meters),
+the cell value (in whatever units it is in), the easting in decimal format,
+and the northing in decimal format. 
+The number of values will vary depending on the length of the profile, cell 
+resolution and the slope angle of the profile line.  Below is an example
+of a plotfile:
+
+<div class="code"><pre>
+# Profile A of elev.ft@snows
+# From (702879.29679757, 4287317.55920185) to (702722.40973589, 4287061.72632285)
+# Stats: Count = 644, Min = 2424.658936, Max = 2513.246094
+# dist value east north
+0.000000 2513.246094 702879.102364 4287317.516912
+0.000000 2513.246094 702878.713496 4287317.118970
+0.556395 2513.246094 702878.324629 4287316.721029
+1.112790 2513.246094 702878.324629 4287316.323088
+...
+</pre></div>
+
+<h2>NOTES</h2>
+
+You might notice the first two 'dist' values in the profile output above are
+both zero.  This is due to the fact the cell resolution for this file is
+less than one meter, and so the function that calculates the distance
+considers the distance between the first cell and the second to be zero. 
+You might also notice, the coordinates given in the header and displayed on
+screen are slightly different from the first and last coordinates given in
+the profile data output.  This is because the profile data output finds the
+eastings and northings for the center of the cells while the coordinate
+transformations from mouse clicks might yield slightly different coordinates
+which still fall within the same cell boundaries.  The difference should
+always be less than the distance between the center and any corner (not
+edge!) of the cell at the resolution of the profiled raster.
+
+<p>
+
+Only four output plotfiles can be made.  Each time a new profile is run, the
+plotfile is immediately written to the file <em>name</em>.<em>letter</em>.
+One can take advantage of this fact to create an unlimited number of
+plotfiles simply by renaming the output files before running more profiles. 
+This may not always be the case, but it is at the time of this writing.
+
+<p>
+
+Useful enhancements to <em>d.profile</em> would include: 
+
+</ul>
+
+<li>Adding an option to display profiles using category
+colors, like a bar-chart.
+
+<li>Allowing profile lines to be defined by a series of
+points, not just two.
+
+<li>Allowing profiles to be saved in a file, for later
+viewing by GRASS.
+
+<li>Allowing the user to enter profile line points by
+typing coordinates.
+
+</ul>
+
+<h3>Perl Script to convert output to a site_list</h3>
+
+The script below will convert the <b>plotfile</b> output to the site_list format.
+It probably won't work 100% for lat/lon datasets.
+
+<p>
+
+<TT>
+<b>#! /usr/bin/perl -w</b><br>
+# prof2sites.pl: converts the output of d.profile to a site_list
+<br><br>
+<b>my</b> (<em>$dist</em>, <em>$elev</em>, <em>$east</em>, <em>$north</em>);
+<br><br>
+<b>while</b> (&lt;<b>STDIN</b>&gt;)<br>
+{<br>
+&nbsp;&nbsp;<b>if</b> (m/^#/)<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>print</b> "<em>$_</em>";<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<b>else</b><br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>chomp</b>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<em>$dist</em>, <em>$elev</em>, <em>$east</em>, <em>$north</em>) = <b>split</b> / /;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>print</b> "<em>$east</em>|<em>$north</em>|<em>$elev</em>|#1 \%<em>$dist</em> \@Profile\n";<br>
+&nbsp;&nbsp;}<br>
+}<br>
+</TT>
+
+<h2>BUGS</h2>
+
+None known.
+
+<h2>AUTHOR</h2>
+
+Dave Johnson
+<br> DBA Systems, Inc. <br>
+10560 Arrowhead Drive <br>
+Fairfax, Virginia 22030
+
+<p>
+Modified by Eric G. Miller for profile output, support of 
+floating point rasters, and optional display raster (02-Dec-2000).
+
+<p><i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>

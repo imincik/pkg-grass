@@ -1,0 +1,46 @@
+<h2>DESCRIPTION</h2>
+
+
+Calculates basic univariate statistics for numeric
+attributes in a data table. It will calculate minimum, maximum, range, mean,
+standard deviation, variance, coefficient of variation, quartiles, median,
+and 90th percentile. It is closely based on <em>r.univar.sh</em> and uses
+<em>db.select</em> to create a list values for statistical calculations.
+This script could be replaced by an updated <em>v.univar</em>.
+<p>
+
+<em>(GRASS Shell Script)</em>
+
+<h2>NOTES</h2>
+
+If the database and driver are not specified, the module will use the default
+values set in <em>db.connect</em>.
+
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region rast=elevation.10m -p
+v.random out=samples n=100
+v.db.addtable samples col="heights double precision"
+v.what.rast samples rast=elevation.10m col=heights
+v.db.select samples
+
+v.univar.sh samples col=heights
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.univar.html">r.univar</a>,
+<a href="r.univar.sh.html">r.univar.sh</a>, 
+<a href="v.univar.html">v.univar,</a>,
+<a href="db.select.html">db.select</a>,
+<a href="d.vect.thematic.html">d.vect.thematic</a></em>
+
+<p> AUTHORS
+v.univar.sh: Michael Barton, Arizona State University
+<p>
+and authors of <em>r.univar.sh</em>
+<p>
+<i>Last changed: $Date: 2011-11-08 01:42:51 -0800 (Tue, 08 Nov 2011) $</i>

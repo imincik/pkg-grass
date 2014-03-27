@@ -1,0 +1,9 @@
+usr/bin/grass64 usr/bin/grass
+usr/share/man/man1/grass64.1.gz usr/share/man/man1/grass.1.gz
+usr/share/man/man1/grass64.1.gz usr/share/man/man1/x-grass.1.gz
+usr/share/doc/grass-core/AUTHORS usr/lib/grass64/AUTHORS
+usr/share/doc/grass-core/COPYING usr/lib/grass64/COPYING
+usr/share/doc/grass-core/contributors.csv usr/lib/grass64/contributors.csv
+usr/share/doc/grass-core/contributors_extra.csv usr/lib/grass64/contributors_extra.csv
+usr/share/doc/grass-core/translators.csv usr/lib/grass64/translators.csv
+usr/share/common-licenses/GPL-2 usr/lib/grass64/GPL.TXT

@@ -1,0 +1,240 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.menu</em> allows the user to create a menu containing
+a TITLE and options, and to display this menu in the active
+frame on the graphics monitor.  After the menu is displayed
+in the active frame, the mouse must be used to select one of the menu
+options.  The number associated with the selected menu
+option is then printed to standard output (<tt>stdout</tt>) and the program
+exits.  This program provides
+GRASS macro writers with a mouse interface for user interaction.
+
+<p>
+Parameters can be stated on the command line, from within standard input
+(<tt>stdin</tt>), or from within a script file
+(as illustrated <a href="#example">below</a>).
+
+<p>
+The user can specify the menu's background, text, and line
+colors (<b>bcolor</b>, <b>tcolor</b>, and
+<b>dcolor</b>) and the menu size (<b>size</b>) on
+the command line. If the user sets at least one of these
+values on the command line, any remaining values that are
+not specified will be set (automatically) to their default values.
+
+<h2>NOTES</h2>
+
+<h3>Menu Information:</h3> 
+
+After the user has (optionally) specified menu colors and
+size, the program expects the user to enter information
+about the menu's location and content.  The menu will be
+placed in the lower right corner of the active display frame
+by default if the user does not position it elsewhere using
+the <tt>.T</tt> or <tt>.L</tt> commands.
+
+<p>
+The user specifies the menu contents by entering a menu
+TITLE followed by the option choices to appear in the menu
+when displayed.  The user <em>must</em> enter a menu TITLE
+and at least one menu option.
+All <tt>.dot</tt> commands are optional.
+
+<dl>
+<dt>
+<b>#</b>
+<dd>
+Comment line. (ignored)
+
+<dt>
+<b>.B</b> <em>value</em> 
+<dd>
+Specifies the menu's background color.
+
+<dt>
+<b>.C</b> <em>value</em> 
+<dd>
+Specifies the menu's text color. 
+
+<dt>
+<b>.D</b> <em>value</em> 
+<dd>
+Specifies the menu's dividing line color.
+
+<dt>
+<b>.F</b> <em>value</em> 
+<dd>
+Specifies the menu's font. May be any of the standard GRASS fonts.
+(see <em><a href="d.font.html">d.font</a></em>)
+
+<dt>
+<b>.S</b> <em>value</em> 
+<dd>
+Specifies the menu's font size.
+(as a percentage of the active frame's height). 
+
+<dt>
+<b>.T</b> <em>value</em> 
+<dd>
+Specifies the menu's distance from the active display frame's top edge 
+(as a percentage of the active frame's height). 
+
+<dt>
+<b>.L</b> <em>value</em> 
+<dd>
+Specifies the menu's distance from the active display frame's left edge 
+(as a percentage of the active frame's width). 
+
+<dt>
+<em>menu TITLE</em> 
+<dd>
+A TITLE that describes the type of options listed in the menu, 
+and that will appear at the top of the menu when it is displayed. 
+
+<dt>
+<em>option name</em>(s) 
+<dd>
+The options that will appear in the menu when displayed. 
+Each menu option should appear on a separate line. 
+The user may enter as many options as desired, but must enter at least 
+one menu option. 
+
+</dl>
+
+Note: The user should choose a menu size and location that will allow 
+all menu options to be displayed in the active frame. 
+
+<p>
+
+If the user enters the menu TITLE and option(s) from
+standard input (i.e., at the keyboard rather than from a
+file), the user should enter <em>control-d</em> to end
+input and display the menu in the active frame on the
+graphics monitor.  (Note: The <em>d.menu</em> program can
+also be incorporated into UNIX Bourne shell script macros.
+The below example shows how this might be done.)
+
+<A NAME="example"></a>
+
+<h2>EXAMPLES</h2>
+
+<h3>Example 1</h3>
+
+<div class="code"><pre>
+a=`d.menu << EOF
+# set the background color
+.B brown
+# set the text color
+.C yellow
+# set the text size in % of entire screen height
+.S 3
+# set the top edge
+.T 10
+# set the LEFT edge
+.L 10
+# The menu Title
+Sample Menu
+# the options
+option 1
+option 2
+option 3
+option 4
+option 5
+option 6
+EOF
+`
+
+echo "You have just chosen option $a"
+</pre></div>
+<br>
+
+<h3>Example 2</h3>
+
+In the following example, the shell script <em>menu2</em>
+calls the shell script <em>color.select</em> which contains
+<em>d.menu</em> commands to display a menu in the current
+frame on the graphics monitor.  After the user selects an
+option from the display menu, the selection number is
+available for use by <em>menu2</em>.
+
+<h4>Contents of file <em>menu2</em>:</h4> 
+
+<div class="code"><PRE>
+#! /bin/csh -f
+set option = 0
+set colors = (red green blue black white )
+@ option = `color.select`
+
+if ($option &lt;= 5) then
+     set color = $colors[$option]
+     echo $color
+
+endif
+exit
+</PRE></div>
+
+<h4>Contents of file <em>color.select</em>:</h4> 
+
+<div class="code"><PRE>
+#! /bin/csh -f
+d.menu bcolor=red tcolor=green dcolor=yellow size=5 &lt;&lt; EOF
+.T 25
+.L 25
+Color Choices
+Option 1
+Option 2
+Option 3
+Option 4
+Option 5
+EOF
+</PRE></div>
+
+<p>
+
+If the user runs <em>menu2</em>, a menu will be displayed
+on the graphics monitor that has red background, green
+text, with menu options divided by yellow lines, and a text
+size of 5% of the active display frame height.  The mouse
+cursor will become active, allowing the user to select (by
+pointing with the mouse) one of the displayed menu
+options.  Here, these menu options are called
+<em>Option 1</em>, <em>Option 2</em>, and
+<em>Option 3</em>, etc.  The first line of text (here,
+the words <em>Color Choices</em>) contains the TITLE of
+the menu; this line is <b>not</b> a menu option that can be
+chosen by the user with the mouse. When the user presses
+one of the mouse buttons while pointing to the desired menu
+choice, the number of the option chosen will be available
+for capture by the shell script <em>menu2</em>.
+<em>menu2</em> is a simple example that takes this
+information and only echoes it to the screen.
+
+<h2>NOTES</h2>
+
+Although the user can vary text size, all text within the
+same menu is displayed in a single text size (and font). If
+the user specifies that items included in the menu's text
+be displayed in different sizes, all text will be displayed
+in the size stated last.
+
+<h2>SEE ALSO</h2>
+
+<em><a href="d.ask.html">d.ask</a></em><br>
+<em><a href="d.font.html">d.font</a></em><br>
+<em><a href="d.frame.html">d.frame</a></em><br>
+<em><a href="d.grid.html">d.grid</a></em><br>
+<em><a href="d.legend.html">d.legend</a></em><br>
+<em><a href="d.labels.html">d.paint.labels</a></em><br>
+<em><a href="d.text.html">d.text</a></em><br>
+<em><a href="d.title.html">d.title</a></em><br>
+
+
+<h2>AUTHOR</h2>
+
+James Westervelt,
+ U.S. Army Construction Engineering 
+Research Laboratory
+
+<p>
+<i>Last changed: $Date: 2011-11-08 03:29:50 -0800 (Tue, 08 Nov 2011) $</i>
+

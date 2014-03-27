@@ -1,0 +1,68 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.allpairs</em> computes the shortest path between each selected 
+node and all other selected nodes. An attribute table is created and 
+linked to layer 1 of the output map. The table contains three columns: 
+<em>cat</em>, <em>to_cat</em>, <em>cost</em>. Each entry denotes the 
+cost of the shortest path from <em>cat</em> to <em>to_cat</em>. If the 
+cost is negative then no path exists. If points are specified by <b>cats, 
+layer</b> or <b>where</b> parameters then the table is filled only for 
+the selected points.
+<p>
+If <b>abcolumn</b> is not given then then the same costs are used for 
+forward and backward arcs.
+<p>
+Contrary to other v.net.* modules, <em>v.net.allpairs</em> does not 
+allow to use arcs and nodes from separate layers.  This means that you
+have to put both types of features into the same layer, but with
+distinct category numbers in order to allow accessing specific nodes
+only. See the example below. 
+
+
+<h2>NOTES</h2>
+
+If the <b>-a</b> flag is set then new points are added on nodes without 
+nodes. These points have the largest category. Precisely, the category 
+value of each new point is larger than any of the old categories. Note 
+that these new points are not included in the output table.
+<br>
+
+<h2>EXAMPLE</h2>
+
+Find shortest path along roads between schools (North Carolina sample 
+dataset):
+<div class="code"><pre>
+#check cat values in arcs layer (streets_wake here):
+v.category streets_wake op=report
+
+#take the existing cat values of the points in schools_wake and add
+50000 (because the cat values in streets_wake go up to just under 50000)
+v.category schools_wake out=schools op=sum cat=50000
+
+#now link the nodes with their new categories to the arcs, with node category values in layer 1
+v.net streets_wake points=schools op=connect thresh=200 out=network
+nlayer=1
+
+#then launch your analysis indicating the cat values of the points which you want to use
+v.net.allpairs network cats=50000-50167 out=allpairs 
+
+#get distance matrix
+v.db.select allpairs
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.net.path">v.net.path</a>,
+<a href="v.net.distance">v.net.distance</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+Daniel Bundala, Google Summer of Code 2009, Student<br>
+Wolf Bergenheim, Mentor<br>
+Markus Metz
+
+<p>
+<i>Last changed: $Date: 2012-10-24 01:13:53 -0700 (Wed, 24 Oct 2012) $</i>

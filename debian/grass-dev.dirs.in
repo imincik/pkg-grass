@@ -1,0 +1,4 @@
+usr/lib/grass@VERSION@/include
+usr/lib/grass@VERSION@/include/Make
+usr/lib/grass@VERSION@/tools
+usr/share/pkgconfig

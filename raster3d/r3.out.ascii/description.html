@@ -1,0 +1,58 @@
+<h2>DESCRIPTION</h2>
+
+Outputs 3D raster maps in ASCII format. The <em>map</em> parameter is
+a valid 3D raster map in the current mapset search path. The <em>output</em> 
+parameter is the name of an ASCII file which will be written in the 
+current working directory.
+<p>
+If <em>output</em> is not specified then standard output (stdout) is used.
+The <em>-h</em> flag may be used to suppress header information. The
+module is sensitive to region settings (set with <em>g.region</em>).
+
+<h2>NOTES</h2>
+The default format for the ASCII file is equivalent to that required
+by <em>r3.in.ascii</em>. In particular, files output by
+<em>r3.out.ascii</em> with header information may be converted back to
+3D raster maps with <em>r3.in.ascii</em>.
+
+<p>
+The format of the ASCII file is:
+<div class="code"><pre>
+north:   <i>floating point</i>
+south:   <i>floating point</i>
+east:    <i>floating point</i>
+west:    <i>floating point</i>
+top:     <i>floating point</i>
+bottom:  <i>floating point</i>
+rows:    <i>integer</i>
+cols:    <i>integer</i>
+levels:  <i>integer</i>
+</pre></div>
+
+The header is followed by cell values in <em>floating point</em> format.
+Cell values are output as a series of horizontal slices in row-major
+order.  That is, 
+
+<div class="code"><pre>
+  (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
+(x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
+
+and so on.
+</pre></div>
+
+<p>
+One level maps can be imported with <em>r.in.ascii</em> (2D raster) after removing
+the header lines "top", "bottom" and "levels".
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r3.in.ascii.html">r3.in.ascii</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+<h2>AUTHORS</h2>
+Roman Waupotitsch, Michael Shapiro, 
+Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka
+
+<p><i>Last changed: $Date: 2011-09-13 13:13:36 -0700 (Tue, 13 Sep 2011) $</i>

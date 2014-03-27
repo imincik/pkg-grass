@@ -1,0 +1,2 @@
+extend-diff-ignore = "(^|/)(config\.sub|config\.guess|Makefile|grasslib.dox.org)$"
+

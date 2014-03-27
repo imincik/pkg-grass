@@ -1,0 +1,101 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:	v.in.wfs
+# AUTHOR(S):	Markus Neteler. neteler itc it
+#               Hamish Bowman (fixes)
+# PURPOSE:	WFS support
+# COPYRIGHT:	(C) 2006-2008, 2010 Markus Neteler and GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+# GetFeature example:
+# http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0
+#############################################################################
+
+#%Module
+#% description: Import GetFeature from WFS
+#% keywords: vector, import, wfs
+#%end
+#%option
+#% key: wfs
+#% type: string
+#% description: GetFeature URL starting with 'http'
+#%end
+#%option
+#% key: output
+#% type: string
+#% gisprompt: new,vector,vector
+#% description: Name for output vector map
+#% required : yes
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE=`basename "$0"`
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+# xerces support compiled in?
+OGRINFO=`which ogrinfo`
+#TODO: this is Linux only, needs a fix:
+#if [ -z "`ldd $OGRINFO | grep xerces`" ] ; then
+#  g.message -e "OGR needs to be compiled with xerces-c support"
+#  exit 1
+#fi
+
+#### check if we have curl
+if [ ! -x "`which curl`" ] ; then
+    g.message -e "'curl' is required, please install first"
+    exit 1
+fi
+
+TEMPFILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TEMPFILE" ] ; then
+    g.message -e "Unable to create temporary files"
+    exit 1
+fi
+
+OUT="$GIS_OPT_OUTPUT"
+WFS_URL="$GIS_OPT_WFS"
+
+g.message "Retrieving data ..."
+curl "$WFS_URL" > "$TEMPFILE.xml"
+
+# check for errors:
+grep "ExceptionText" "$TEMPFILE.xml" > /dev/null
+if [ $? -eq 0 ] ; then
+  g.message -e "WFS server error:"
+  grep "ExceptionText" "$TEMPFILE.xml" | cut -d'>' -f2- | cut -d'<' -f1
+exit 1
+fi
+
+# cp "$TEMPFILE.xml" /tmp/
+
+# TODO: sure to override projection check?
+v.in.ogr dsn="$TEMPFILE.xml" output=$OUT -o
+if [ $? -ne 0 ] ; then
+  g.message -e "WFS-XML file not readable. Check if xerces-c support is compiled into GDAL/OGR library."
+  rm -f "$TEMPFILE.xml" "$TEMPFILE" "$TEMPFILE.gfs"
+  exit 1
+fi
+
+rm -f "$TEMPFILE.xml" "$TEMPFILE" "$TEMPFILE.gfs"
+
+v.support "$OUT" cmdhist="${CMDLINE}"
+g.message "Vector points map <$OUT> imported from WFS."
+
+exit 0
+
